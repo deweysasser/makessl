@@ -26,3 +26,6 @@ If you use 'make certs', a root certificate authority and signing key
 will be generated for you. You'll need the file ca/ca-chain.pem as a
 certificate chain.
 
+## License
+
+This code is licensed under the GPL v2.  See LICENSE.txt for more details.
