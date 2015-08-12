@@ -1,0 +1,6 @@
+# Properties of the Certificates (who you are)
+COUNTRY=US
+ST=Massachusetts
+LOCALITY=
+ORG=example.com
+OU=

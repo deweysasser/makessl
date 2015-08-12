@@ -4,11 +4,7 @@
 ######################################################################
 
 # Properties of the Certificates (who you are)
-COUNTRY=US
-ST=Massachusetts
-LOCALITY=
-ORG=example.com
-OU=
+include ssl-data.txt
 
 
 # Properties of the keys (you probably don't want to change this)
