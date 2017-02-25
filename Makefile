@@ -22,7 +22,7 @@ SIGNINGCA=ca/$(addsuffix -signing.crt, $(ORG))
 SIGNINGCSR=ca/$(addsuffix -signing.csr, $(ORG))
 
 DIRS=$(wildcard hosts/*)
-BASES=$(foreach name,$(DIRS), $(name)/$(shell echo $(name) | tr -- -. __))
+BASES=$(foreach name,$(DIRS), $(name)/$(shell echo $(notdir $(name)) | tr -- -. __))
 CSRS=$(addsuffix .csr, $(BASES))
 CRTS=$(addsuffix .crt, $(BASES))
 KEYS=$(addsuffix .key, $(BASES))
