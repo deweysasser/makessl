@@ -48,7 +48,7 @@ certs: $(SIGNINGCRT) $(CRTS)
 
 bundles: $(BUNDLES)
 
-openvpn: $(OVPNFILES)
+openvpn: openvpn-check $(OVPNFILES)
 
 all: $(CSRS)
 
@@ -94,7 +94,8 @@ export CLIENT SERVER ORG
 	echo CLIENT=$(CLIENT)
 	echo SERVER=$(SERVER)
 	envsubst < $< > $(dir $@)/$(VPNHOST).ovpn
-	zip -j $@ $(dir $@)/$(VPNHOST).ovpn $(dir $@)/*.{key,crt,bundle} $(ROOTCRT) $(SIGNINGCRT) $(CACHAIN)
+	envsubst < $< > $(dir $@)/$(VPNHOST).conf
+	zip -j $@ $(dir $@)/$(VPNHOST).{ovpn,conf} $(dir $@)/*.{key,crt,bundle} $(ROOTCRT) $(SIGNINGCRT) $(CACHAIN)
 
 %-openvpn.zip: %.key %.crt %.ovpn
 
@@ -115,6 +116,9 @@ endif
 $(CACHAIN): $(SIGNINGCRT) $(ROOTCRT)
 	cat $^ > $@
 
+
+openvpn-check:
+	@if [ -z "$(VPNHOST)" ] ; then echo VPNHOST variable is not set; exit 1; fi
 
 hosts:
 	mkdir $@

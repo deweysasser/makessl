@@ -4,3 +4,5 @@ ST=Massachusetts
 LOCALITY=
 ORG=example.com
 OU=
+# Name of the VPN host (if you're using this for OpenVPN)
+VPNHOST=
