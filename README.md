@@ -20,6 +20,10 @@ To generate a new certificate (or set of certificates);
      mkdir -p hosts/www.example.com
      make certs
 
+To generate certificate bundles for all hosts (this will implicitly make all certificates as well):
+
+     make bundles
+
 ## Certificate Authority
 
 If you use 'make certs', a root certificate authority and signing key

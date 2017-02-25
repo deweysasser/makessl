@@ -26,6 +26,7 @@ BASES=$(foreach name,$(DIRS), $(name)/$(shell echo $(notdir $(name)) | tr -- -. 
 CSRS=$(addsuffix .csr, $(BASES))
 CRTS=$(addsuffix .crt, $(BASES))
 KEYS=$(addsuffix .key, $(BASES))
+BUNDLES=$(addsuffix .bundle, $(BASES))
 
 .PRECIOUS: %.key
 
@@ -35,13 +36,14 @@ csrs: $(CSRS)
 
 certs: $(SIGNINGCA) $(CRTS) 
 
+bundles: $(BUNDLES)
+
 all: $(CSRS)
 
 # To make a key...
 %.key:
 	mkdir -p `dirname $@`
 	openssl genrsa $(KEYSIZE) > $@
-
 
 
 # To make a CSR from a key
@@ -53,6 +55,10 @@ all: $(CSRS)
 %.crt: %.csr $(ROOTCRT)
 	openssl x509 -req -in $< -CA $(SIGNINGCA) -CAkey $(SIGNINGKEY) -CAcreateserial -days $(EXPIRATION) -out $@
 	openssl verify -CAfile ca/ca-chain.pem $@
+
+# To make a certificate bundle
+%.bundle: %.crt $(ROOTCRT)
+	cat ca/ca-chain.pem $< > $@
 
 # Signing key magic.  First the root key
 $(ROOTCRT): $(ROOTKEY)
