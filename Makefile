@@ -74,3 +74,9 @@ $(SIGNINGCA): $(SIGNINGKEY) $(ROOTCRT)
 
 hosts:
 	mkdir $@
+
+info::
+	@echo BASES=$(BASES)
+	@echo KEYS=$(KEYS)
+	@echo CERTS=$(CRTS)
+	@echo BUNDLES=$(BUNDLES)
