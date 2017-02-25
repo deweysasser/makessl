@@ -55,6 +55,15 @@ However, on Linux servers this extention needs to be `.conf`.  The
 generated `.zip` file contains copies of the configuration file with
 both extentions.
 
+CAVEATS:
+
+OpenVPN does not seem to like certificate chains.  By default, this
+Makefile does *NOT* use multi-level certificate chains -- every
+certificate is signed with the root CA.  HOWEVER, if you set
+`USE_INTERMEDIATE_CRT=yes` then the Makefile will generate and use an
+intermediate signing certificate.  The current OpenVPN configuration
+will not work in this mode.  Contributions/fixes for this welcome.
+
 ## License
 
 This code is licensed under the GPL v2.  See LICENSE.txt for more details.
