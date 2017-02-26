@@ -1,0 +1,34 @@
+#!/usr/bin/perl
+
+use Getopt::Long;
+
+sub proc() {
+    my $fh;  open($fh, $_[0]);
+    while(<$fh>) {
+	s/\$\{([a-zA-Z0-9_]+)}/$ENV{$1}/ge;
+	if (/\@include (.*)/) {
+	    my $name = $1;
+	    chop $name if /\r/;
+	    print "#Including $name\n";
+	    $found = &find($name);
+	    &proc($found) if $found;
+	}
+	else {
+	    print;
+	}
+    }
+}
+
+# Find the file in curdir or includes
+sub find() {
+    my $name=$_[0];
+    foreach $d (@includes) {
+	my $path  = "$d/$name";
+	return $path if -r $path;
+    }
+}
+
+GetOptions('I=s@' => \@includes);
+unshift(@includes, '.');
+
+foreach $a (@ARGV) { &proc($a) }

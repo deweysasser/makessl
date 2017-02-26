@@ -84,17 +84,17 @@ endif
 # To make a certificate bundle
 %.bundle: %.crt $(CACHAIN)
 	cat $(CACHAIN) $< > $@
-#	cat $< $(CACHAIN) > $@
 
-export CLIENT SERVER ORG
+export CLIENT SERVER ORG CLIENT_CERT_TEXT
+
+TOOLS=$(CURDIR)/tools
 
 %-$(VPNHOST)-openvpn.zip: SERVER=$(VPNHOST)
 %-$(VPNHOST)-openvpn.zip: CLIENT=$(notdir $(subst -$(VPNHOST)-openvpn.zip,,$@))
 %-$(VPNHOST)-openvpn.zip: openvpn-client-template.conf %.key %.bundle $(ROOTCRT) $(SIGNINGCRT) $(CACHAIN)
 	echo CLIENT=$(CLIENT)
 	echo SERVER=$(SERVER)
-	envsubst < $< > $(dir $@)/$(VPNHOST).ovpn
-	envsubst < $< > $(dir $@)/$(VPNHOST).conf
+	perl $(TOOLS)/pp -I ca -I $(dir $@) $< | tee $(dir $@)/$(VPNHOST).ovpn > $(dir $@)/$(VPNHOST).conf
 	zip -j $@ $(dir $@)/$(VPNHOST).{ovpn,conf} $(dir $@)/*.{key,crt,bundle} $(ROOTCRT) $(SIGNINGCRT) $(CACHAIN)
 
 %-openvpn.zip: %.key %.crt %.ovpn
